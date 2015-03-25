@@ -1,5 +1,6 @@
 <?php
 
+
 class Pancake {
 
 	protected $api_key;

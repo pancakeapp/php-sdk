@@ -1,0 +1,58 @@
+{
+    "_readme": [
+        "This file locks the dependencies of your project to a known state",
+        "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
+        "This file is @generated automatically"
+    ],
+    "hash": "f6ed026fe9f04e28e024917e285d50ca",
+    "packages": [
+        {
+            "name": "brunodebarros/http-request",
+            "version": "1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/BrunoDeBarros/HTTP-Request.git",
+                "reference": "cc223d09ad63a5d78adb9385109b98ffee1540d5"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/BrunoDeBarros/HTTP-Request/zipball/cc223d09ad63a5d78adb9385109b98ffee1540d5",
+                "reference": "cc223d09ad63a5d78adb9385109b98ffee1540d5",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.2.4"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "HTTP": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Bruno De Barros",
+                    "email": "bruno@terraduo.com"
+                }
+            ],
+            "description": "A web crawler, built to be easily dropped into PHP applications, which behaves just like a regular web browser, interpreting location redirects and storing cookies automatically.",
+            "homepage": "https://github.com/BrunoDeBarros/HTTP-Request",
+            "keywords": [
+                "crawler",
+                "http"
+            ],
+            "time": "2015-01-19 12:14:24"
+        }
+    ],
+    "packages-dev": [],
+    "aliases": [],
+    "minimum-stability": "stable",
+    "stability-flags": [],
+    "prefer-stable": false,
+    "platform": [],
+    "platform-dev": []
+}

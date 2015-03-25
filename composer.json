@@ -1,0 +1,10 @@
+{
+  "require": {
+    "brunodebarros/http-request": "1.*"
+  },
+  "autoload": {
+    "psr-4": {
+      "Pancake\\": "src/"
+    }
+  }
+}
