@@ -1,10 +1,29 @@
 {
-  "require": {
-    "brunodebarros/http-request": "1.*"
-  },
-  "autoload": {
-    "psr-4": {
-      "Pancake\\": "src/"
+    "name": "pancake/sdk",
+    "type": "library",
+    "description": "An SDK for developing with the Pancake REST API.",
+    "keywords": [
+        "pancake",
+        "api",
+        "sdk"
+    ],
+    "homepage": "https://github.com/BrunoDeBarros/pancake-php-sdk",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Bruno Moreira De Barros",
+            "email": "bruno@terraduo.com",
+            "homepage": "https://terraduo.com",
+            "role": "Developer"
+        }
+    ],
+    "require": {
+        "php": ">=5.3.0",
+        "brunodebarros/http-request": "1.*"
+    },
+    "autoload": {
+        "psr-4": {
+            "Pancake\\": "src/"
+        }
     }
-  }
 }
