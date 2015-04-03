@@ -4,20 +4,20 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "f6ed026fe9f04e28e024917e285d50ca",
+    "hash": "801f7a894a26d7ec7e1a9c1d29eb88ee",
     "packages": [
         {
             "name": "brunodebarros/http-request",
-            "version": "1.0.0",
+            "version": "1.0.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/BrunoDeBarros/HTTP-Request.git",
-                "reference": "cc223d09ad63a5d78adb9385109b98ffee1540d5"
+                "reference": "fcb7ee1b670fbbd914f4d1e068dda8f8bbc4f219"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/BrunoDeBarros/HTTP-Request/zipball/cc223d09ad63a5d78adb9385109b98ffee1540d5",
-                "reference": "cc223d09ad63a5d78adb9385109b98ffee1540d5",
+                "url": "https://api.github.com/repos/BrunoDeBarros/HTTP-Request/zipball/fcb7ee1b670fbbd914f4d1e068dda8f8bbc4f219",
+                "reference": "fcb7ee1b670fbbd914f4d1e068dda8f8bbc4f219",
                 "shasum": ""
             },
             "require": {
@@ -45,7 +45,7 @@
                 "crawler",
                 "http"
             ],
-            "time": "2015-01-19 12:14:24"
+            "time": "2015-03-29 22:52:32"
         }
     ],
     "packages-dev": [],
@@ -53,6 +53,9 @@
     "minimum-stability": "stable",
     "stability-flags": [],
     "prefer-stable": false,
-    "platform": [],
+    "prefer-lowest": false,
+    "platform": {
+        "php": ">=5.3.0"
+    },
     "platform-dev": []
 }
