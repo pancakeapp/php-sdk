@@ -4,20 +4,20 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "801f7a894a26d7ec7e1a9c1d29eb88ee",
+    "hash": "4841296883ff376e6d3ff913a66ec27f",
     "packages": [
         {
             "name": "brunodebarros/http-request",
-            "version": "1.0.1",
+            "version": "1.0.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/BrunoDeBarros/HTTP-Request.git",
-                "reference": "fcb7ee1b670fbbd914f4d1e068dda8f8bbc4f219"
+                "reference": "b13369cde9dbd25691831c3769f774552537dbeb"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/BrunoDeBarros/HTTP-Request/zipball/fcb7ee1b670fbbd914f4d1e068dda8f8bbc4f219",
-                "reference": "fcb7ee1b670fbbd914f4d1e068dda8f8bbc4f219",
+                "url": "https://api.github.com/repos/BrunoDeBarros/HTTP-Request/zipball/b13369cde9dbd25691831c3769f774552537dbeb",
+                "reference": "b13369cde9dbd25691831c3769f774552537dbeb",
                 "shasum": ""
             },
             "require": {
@@ -45,7 +45,7 @@
                 "crawler",
                 "http"
             ],
-            "time": "2015-03-29 22:52:32"
+            "time": "2015-04-06 15:58:59"
         }
     ],
     "packages-dev": [],
