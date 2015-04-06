@@ -9,6 +9,8 @@ try {
     $server  = new Server("http://localhost/pancakepayments", "vvRVmZQvysA1ndKpmZgJoQNwW0wb8nVzwZ4axTvz");
     $invoice = new Invoice($server);
 
+    $reusable_items = ReusableInvoiceItems::get($server);
+
     $invoice->client_id = 2;
 
     $due_date = strtotime("2015-04-24"); # All dates are to be provided as timestamps.
@@ -31,7 +33,7 @@ try {
     $invoice->addFile("LICENSE.txt"); # Or a filename.
     $invoice->addFileFromContents("this is my test file", "filename.txt"); # You can provide your file's contents here and give it a filename.
 
-    # Will always create a new record, for now.
+    # Will always create a new record; it can't update existing records.
     $result = $invoice->save();
 
     echo "Created Invoice #{$result['unique_id']}.";

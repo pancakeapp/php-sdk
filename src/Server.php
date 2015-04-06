@@ -53,7 +53,7 @@ class Server {
         return $this->request($url, $data, "POST");
     }
 
-    function get($url, $data) {
+    function get($url, $data = array()) {
         $contents = $this->request($url, $data, "GET");
         unset($contents['status']);
         unset($contents['message']);
