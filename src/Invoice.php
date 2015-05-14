@@ -83,7 +83,7 @@ class Invoice {
             'item_time_entries' => "",
             'item_type_table' => "",
             'item_type_id' => 0,
-            'tax_ids' => $tax_ids,
+            'tax_ids' => is_array($tax_ids) ? $tax_ids : [$tax_ids],
             'discount' => $discount,
             'discount_is_percentage' => $discount_is_percentage,
             'total' => $qty * $rate,
