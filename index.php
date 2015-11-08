@@ -36,6 +36,9 @@ try {
     # Will always create a new record; it can't update existing records.
     $result = $invoice->save();
 
+    # Send the invoice.
+    Invoices::send($server, $result['unique_id']);
+
     echo "Created Invoice #{$result['unique_id']}.";
 
 } catch (ApiException $e) {
