@@ -3,6 +3,10 @@ Pancake PHP SDK
 
 A Pancake API SDK for PHP. You can use it to integrate everything in Pancake from a third-party app.
 
+```
+composer require pancake/sdk
+```
+
 This API SDK is still a work in progress but we're committed to improving it as quickly as possible. To that end, all pull requests or issues raised here will be treated with the utmost urgency and will be resolved and merged in 48 hours.
 
 API Documentation is still very much an ongoing effort, but you can find some details [here](http://i.28hours.org/files/APIEndpoints.pdf).
