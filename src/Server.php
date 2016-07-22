@@ -2,6 +2,7 @@
 
 namespace Pancake;
 
+use Composer\CaBundle\CaBundle;
 use GuzzleHttp\Client;
 
 class Server
@@ -24,8 +25,9 @@ class Server
             $url = rtrim($url, "/") . "/api/1/";
         }
 
-        $this->http    = new Client([
+        $this->http = new Client([
             "base_uri" => $url,
+            "verify" => CaBundle::getSystemCaRootBundlePath(),
         ]);
     }
 
