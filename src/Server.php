@@ -2,14 +2,16 @@
 
 namespace Pancake;
 
-class Server {
+use GuzzleHttp\Client;
 
-    protected $url;
+class Server
+{
+
     protected $api_key;
     protected $http;
 
-    function __construct($url, $api_key) {
-        $this->http    = new \HTTP_Request();
+    public function __construct($url, $api_key)
+    {
         $this->api_key = $api_key;
 
         $url = rtrim($url, "/") . "/";
@@ -22,16 +24,33 @@ class Server {
             $url = rtrim($url, "/") . "/api/1/";
         }
 
-        $this->url = $url;
+        $this->http    = new Client([
+            "base_uri" => $url,
+        ]);
     }
 
-    function request($url, $data, $method = "POST") {
+    public function request($url, $data, $method = "POST")
+    {
         $data['X-API-KEY'] = $this->api_key;
-        $original_contents = $this->http->request($this->url . $url, $method, $data);
-        $contents          = json_decode($original_contents, true);
+
+        if ($method == "POST") {
+            $response = $this->http->request($method, $url, [
+                "form_params" => $data,
+            ]);
+        } elseif ($method == "GET") {
+            $response = $this->http->request($method, $url, [
+                "query" => $data,
+            ]);
+        } else {
+            $response = $this->http->request($method, $url);
+        }
+
+        $original_contents = $response->getBody()->getContents();
+        $contents = json_decode($original_contents, true);
 
         if ($contents === null) {
-            throw new ApiException("An unknown error occurred on Pancake's side. It was probably logged in your Errors & Diagnostics.", $this->http->getLastRequest(), $original_contents);
+            $error = "An error occurred on Pancake's side. It was probably logged in your Errors & Diagnostics.";
+            throw new ApiException($error, $original_contents);
         }
 
         if ($contents['status'] !== true) {
@@ -41,19 +60,23 @@ class Server {
                 $message = $contents['error_message'];
             } elseif (isset($contents['message'])) {
                 $message = $contents['message'];
+            } else {
+                $message = "Unknown Error";
             }
 
-            throw new ApiException($message, $this->http->getLastRequest(), $contents);
+            throw new ApiException($message, $contents);
         }
 
         return $contents;
     }
 
-    function post($url, $data) {
+    public function post($url, $data)
+    {
         return $this->request($url, $data, "POST");
     }
 
-    function get($url, $data = array()) {
+    public function get($url, $data = array())
+    {
         $contents = $this->request($url, $data, "GET");
         unset($contents['status']);
         unset($contents['message']);
@@ -61,5 +84,4 @@ class Server {
 
         return reset($contents);
     }
-
 }
