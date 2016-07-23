@@ -2,26 +2,39 @@
 
 namespace Pancake;
 
+/**
+ * Fetch invoices.
+ *
+ * @package  Pancake
+ * @author   Pancake Dev Team <support@pancakeapp.com>
+ * @license  https://www.pancakeapp.com/license Pancake End User License Agreement
+ * @link     https://www.pancakeapp.com
+ *
+ */
 class Invoices
 {
 
     public static function get(Server $server)
     {
-        return $server->get("invoices");
+        return $server->get("invoices/fetch");
     }
 
     public static function getByClientId(Server $server, $client_id)
     {
-        return $server->get("invoices", [
+        return $server->get("invoices/fetch", [
             "client_id" => $client_id,
         ]);
     }
 
     public static function getByUniqueId(Server $server, $unique_id)
     {
-        return $server->get("invoices", [
+        $result = $server->get("invoices/fetch", [
             "unique_id" => $unique_id,
+            "include_totals" => true,
+            "include_partials" => true,
         ]);
+
+        return reset($result);
     }
 
     public static function send(Server $server, $unique_id)
