@@ -23,7 +23,7 @@ class InvoicesTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->server = new Server("https://demo.pancakeapp.com", "y2x45e07cavdpiy18c95r35u40eo49xg4lyv7hjw");
+        $this->server = new Server(PANCAKE_URL, PANCAKE_API_KEY);
     }
 
     /**
@@ -34,26 +34,37 @@ class InvoicesTest extends \PHPUnit_Framework_TestCase
      */
     protected function findInvoice($unique_id)
     {
-        $client_invoices = Invoices::getByUniqueId($this->server, $this->client_id);
-        $found_invoice = false;
-        foreach ($client_invoices as $invoice) {
-            if ($invoice["unique_id"] == $unique_id) {
-                $found_invoice = true;
-            }
-        }
-        return $found_invoice;
+        $invoice = Invoices::getByUniqueId($this->server, $unique_id);
+        return $invoice["unique_id"] == $unique_id;
     }
 
     public function testCreate()
     {
         $invoice = new Invoice($this->server);
         $invoice->client_id = $this->client_id;
-        $invoice->addStandardLineItem("Test", 2, 20);
-        $result = $invoice->save();
+        $invoice->addStandardLineItem("Test", 2, 20, ["10%"]);
+        $invoice->save();
 
-        self::assertArrayHasKey("unique_id", $result);
-        self::assertNotEmpty($result["unique_id"]);
-        self::assertTrue($this->findInvoice($result["unique_id"]));
+        self::assertNotEmpty($invoice->unique_id);
+        self::assertTrue($this->findInvoice($invoice->unique_id));
+    }
+
+    /**
+     * @depends testCreate
+     * @expectedException \Pancake\DomainException
+     */
+    public function testCannotChangeUniqueId()
+    {
+        $invoice = new Invoice($this->server);
+        $invoice->client_id = 1;
+        $invoice->addStandardLineItem("Test", 2, 20);
+        $invoice->save();
+
+        $invoice->unique_id = "test";
+
+        self::assertTrue($this->findInvoice($invoice->unique_id));
+        Invoices::delete($this->server, $invoice->unique_id);
+        self::assertFalse($this->findInvoice($invoice->unique_id));
     }
 
     /**
@@ -64,10 +75,46 @@ class InvoicesTest extends \PHPUnit_Framework_TestCase
         $invoice = new Invoice($this->server);
         $invoice->client_id = 1;
         $invoice->addStandardLineItem("Test", 2, 20);
-        $result = $invoice->save();
+        $invoice->save();
 
-        self::assertTrue($this->findInvoice($result["unique_id"]));
-        Invoices::delete($this->server, $result["unique_id"]);
-        self::assertFalse($this->findInvoice($result["unique_id"]));
+        self::assertTrue($this->findInvoice($invoice->unique_id));
+        Invoices::delete($this->server, $invoice->unique_id);
+        self::assertFalse($this->findInvoice($invoice->unique_id));
+    }
+
+    /**
+     * @depends testCreate
+     * @depends testDelete
+     */
+    public function testMarkAsPaid()
+    {
+        $invoice = new Invoice($this->server);
+        $invoice->client_id = 1;
+        $invoice->addStandardLineItem("Test", 2, 20);
+        $invoice->save();
+
+        self::assertFalse($invoice->is_paid);
+        $invoice->setPaymentDetails(1, "cash_m", null, "Completed", null, null, false);
+        self::assertTrue($invoice->is_paid);
+
+        Invoices::delete($this->server, $invoice->unique_id);
+    }
+
+    /**
+     * @depends testCreate
+     * @depends testDelete
+     */
+    public function testAddPayment()
+    {
+        $invoice = new Invoice($this->server);
+        $invoice->client_id = 1;
+        $invoice->addStandardLineItem("Test", 2, 20);
+        $invoice->save();
+
+        self::assertEquals(0, $invoice->paid_amount);
+        $invoice->addPayment(20, "cash_m", null, "Completed", null, null, false);
+        self::assertEquals(20, $invoice->paid_amount);
+
+        Invoices::delete($this->server, $invoice->unique_id);
     }
 }
