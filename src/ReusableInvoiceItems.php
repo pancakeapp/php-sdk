@@ -2,6 +2,15 @@
 
 namespace Pancake;
 
+/**
+ * Fetch reusable invoice items.
+ *
+ * @package  Pancake
+ * @author   Pancake Dev Team <support@pancakeapp.com>
+ * @license  https://www.pancakeapp.com/license Pancake End User License Agreement
+ * @link     https://www.pancakeapp.com
+ *
+ */
 class ReusableInvoiceItems
 {
 

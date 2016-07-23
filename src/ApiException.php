@@ -10,8 +10,8 @@ use Exception;
  *
  * @package  Pancake
  * @author   Pancake Dev Team <support@pancakeapp.com>
- * @license  http://pancakeapp.com/license Pancake End User License Agreement
- * @link     http://pancakeapp.com
+ * @license  https://www.pancakeapp.com/license Pancake End User License Agreement
+ * @link     https://www.pancakeapp.com
  */
 class ApiException extends Exception
 {
