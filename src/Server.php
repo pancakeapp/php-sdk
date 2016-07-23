@@ -27,7 +27,6 @@ class Server
 
         $this->http = new Client([
             "base_uri" => $url,
-            "verify" => CaBundle::getSystemCaRootBundlePath(),
         ]);
     }
 
@@ -52,6 +51,16 @@ class Server
 
         if ($contents === null) {
             $error = "An error occurred on Pancake's side. It was probably logged in your Errors & Diagnostics.";
+
+            $error_details = [];
+            $regex = "/<span class=\"message\">([^<]+?)<br \\/>([^<]+?)<br \\/>([^<]+?)<\\/span>/us";
+            if (preg_match($regex, $original_contents, $error_details)) {
+                $error_type = [];
+                preg_match("/<span class=\"type\">([^<]+?)<\\/span>/us", $original_contents, $error_type);
+
+                $error = "Pancake-side {$error_type[1]} {$error_details[1]}\n{$error_details[2]}\n{$error_details[3]}";
+            }
+
             throw new ApiException($error, $original_contents);
         }
 
