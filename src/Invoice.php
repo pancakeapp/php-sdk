@@ -3,7 +3,6 @@
 namespace Pancake;
 
 use Zend\Code\Reflection\ClassReflection;
-use Zend\Code\Reflection\DocBlock\Tag\GenericTag;
 use Zend\Code\Reflection\DocBlock\Tag\PropertyTag;
 
 /**

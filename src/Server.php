@@ -2,7 +2,6 @@
 
 namespace Pancake;
 
-use Composer\CaBundle\CaBundle;
 use GuzzleHttp\Client;
 
 class Server
