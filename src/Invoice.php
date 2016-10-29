@@ -2,6 +2,7 @@
 
 namespace Pancake;
 
+use GuzzleHttp\Client;
 use Zend\Code\Reflection\ClassReflection;
 use Zend\Code\Reflection\DocBlock\Tag\PropertyTag;
 
@@ -319,10 +320,10 @@ class Invoice
 
     public function addFile($url)
     {
-
         if (substr($url, 0, strlen("http")) == "http") {
-            $http = new \HTTP_Request();
-            $contents = $http->request($url);
+            $http = new Client();
+            $response = $http->request("GET", $url);
+            $contents = $response->getBody()->getContents();
             $url = explode("?", $url);
             $url = explode("/", $url[0]);
             $filename = end($url);

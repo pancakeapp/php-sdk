@@ -42,8 +42,7 @@ try {
     echo "Created Invoice #{$result['unique_id']}.";
 
 } catch (ApiException $e) {
-    # You can use getRequest() and getResponse() to get details on what went wrong.
-    $request  = $e->getRequest();
+    # You can use getResponse() to get details on what went wrong.
     $response = $e->getResponse();
 
     # Response can be an array (which means Pancake's API replied with an error message), or a blob of HTML (which indicates problems like a Pancake-side error).
