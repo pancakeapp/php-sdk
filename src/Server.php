@@ -3,6 +3,7 @@
 namespace Pancake;
 
 use GuzzleHttp\Client;
+use JetBrains\PhpStorm\ArrayShape;
 
 class Server
 {
@@ -78,6 +79,17 @@ class Server
         }
 
         return $contents;
+    }
+
+    public function convertDocBlockToProperties(string $docblock): array
+    {
+        $matches = [];
+        preg_match_all('/^\s*\*\s+@property(?:-read)?\s+([\S]+)\s+\$([\S]+)$/uim', $docblock, $matches);
+        $properties = [];
+        foreach ($matches[2] as $key => $property_name) {
+            $properties[$property_name] = $matches[1][$key];
+        }
+        return $properties;
     }
 
     public function post($url, $data)

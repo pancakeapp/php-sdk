@@ -1,12 +1,15 @@
 <?php
 
-namespace Pancake;
+use \Pancake\Server;
+use \Pancake\Invoice;
+use \Pancake\ReusableInvoiceItems;
+use \Pancake\Invoices;
+use \Pancake\ApiException;
 
-include 'vendor/autoload.php';
+include '../vendor/autoload.php';
 
 try {
-
-    $server  = new Server("http://localhost/pancakepayments", "vvRVmZQvysA1ndKpmZgJoQNwW0wb8nVzwZ4axTvz");
+    $server = new Server("http://localhost/pancakepayments", "vvRVmZQvysA1ndKpmZgJoQNwW0wb8nVzwZ4axTvz");
     $invoice = new Invoice($server);
 
     $reusable_items = ReusableInvoiceItems::get($server);
@@ -14,16 +17,16 @@ try {
     $invoice->client_id = 2;
 
     $due_date = strtotime("2015-04-24"); # All dates are to be provided as timestamps.
-    $notes    = "some notes";
+    $notes = "some notes";
     $invoice->addPercentagePaymentPart(50, $due_date, $notes);
     $invoice->addFixedPaymentPart(118.46, $due_date, $notes);
 
-    $name        = "item name";
+    $name = "item name";
     $description = "item description";
-    $qty         = 1;
-    $rate        = 100;
-    $taxes       = ["VAT", "10%", 3]; # You can specify a tax name (will search the DB), a percentage (will be created if none exists), or the tax's ID.
-    $discount    = 0;
+    $qty = 1;
+    $rate = 100;
+    $taxes = ["VAT", "10%", 3]; # You can specify a tax name (will search the DB), a percentage (will be created if none exists), or the tax's ID.
+    $discount = 0;
     $invoice->addStandardLineItem($name, $qty, $rate, $taxes, $description, $discount);
     $invoice->addFlatRateLineItem($name, $rate, $taxes, $description, $discount);
     $invoice->addFixedDiscountLineItem($name, 5);
@@ -45,7 +48,8 @@ try {
     # You can use getResponse() to get details on what went wrong.
     $response = $e->getResponse();
 
-    # Response can be an array (which means Pancake's API replied with an error message), or a blob of HTML (which indicates problems like a Pancake-side error).
+    # Response can be an array (which means Pancake's API replied with an error message),
+    # or a blob of HTML (which indicates problems like a Pancake-side error).
     if (is_array($response)) {
         echo "<pre>";
         var_dump($response);

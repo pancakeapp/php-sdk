@@ -128,25 +128,11 @@ class Invoice
         $this->server = $server;
         $this->internal_fields['type'] = "DETAILED";
 
-        $zend = new ClassReflection(self::class);
-        $docblock = $zend->getDocBlock();
-        /** @var PropertyTag[] $properties */
-        $properties = $docblock->getTags("property");
-        foreach ($properties as $property) {
-            $types = $property->getTypes();
-            $type = $types[0];
-            $this->auto_cast[$property->getPropertyName()] = $type;
-        }
-
-        $properties = $docblock->getTags("propertyread");
-        foreach ($properties as $property) {
-            $content = $property->getContent();
-            $property = new PropertyTag();
-            $property->initialize($content);
-
-            $types = $property->getTypes();
-            $type = $types[0];
-            $this->auto_cast[$property->getPropertyName()] = $type;
+        $reflection = new \ReflectionClass($this);
+        $docblock = $reflection->getDocComment();
+        $properties = $server->convertDocBlockToProperties($docblock);
+        foreach ($properties as $name => $type) {
+            $this->auto_cast[$name] = $type;
         }
     }
 
@@ -358,7 +344,7 @@ class Invoice
         return $result;
     }
 
-    public function reload($record = null)
+    public function reload($record = null): array
     {
         if ($record === null) {
             # Fetch the record ourselves.

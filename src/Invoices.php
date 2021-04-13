@@ -34,6 +34,10 @@ class Invoices
             "include_partials" => true,
         ]);
 
+        $invoice = new Invoice($server);
+        foreach ()
+        $invoice->
+
         return reset($result);
     }
 

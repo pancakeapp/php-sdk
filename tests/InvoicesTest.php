@@ -1,11 +1,13 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace Pancake;
+
+use PHPUnit\Framework\TestCase;
 
 /**
  * A PHPUnit test case for \Pancake\Invoices.
  */
-class InvoicesTest extends \PHPUnit_Framework_TestCase
+final class InvoicesTest extends TestCase
 {
     /**
      * The server object which allows everything to use the API.
@@ -21,7 +23,10 @@ class InvoicesTest extends \PHPUnit_Framework_TestCase
      */
     public $client_id = 1;
 
-    public function setUp()
+    /**
+     * This method is called before each test.
+     */
+    public function setUp(): void
     {
         $this->server = new Server(PANCAKE_URL, PANCAKE_API_KEY);
     }
