@@ -18,8 +18,9 @@
         }
     ],
     "require": {
-        "php": "^7.2.5 | ^8.0",
-        "guzzlehttp/guzzle": "^6.5 | ^7.0"
+        "php": "^8.0",
+        "guzzlehttp/guzzle": "^6.5 | ^7.0",
+        "nesbot/carbon": "^2.58"
     },
     "require-dev": {
         "symfony/var-dumper": "^v5.2.6",

@@ -37,10 +37,9 @@ final class InvoicesTest extends TestCase
      * @param string $unique_id
      * @return boolean
      */
-    protected function findInvoice($unique_id)
+    protected function findInvoice(string $unique_id): bool
     {
-        $invoice = Invoices::getByUniqueId($this->server, $unique_id);
-        return $invoice["unique_id"] == $unique_id;
+        return Invoices::getByUniqueId($this->server, $unique_id) !== null;
     }
 
     public function testCreate()
@@ -48,6 +47,7 @@ final class InvoicesTest extends TestCase
         $invoice = new Invoice($this->server);
         $invoice->client_id = $this->client_id;
         $invoice->addStandardLineItem("Test", 2, 20, ["10%"]);
+        $invoice->addPaymentPart(true, 100);
         $invoice->save();
 
         self::assertNotEmpty($invoice->unique_id);
@@ -56,10 +56,11 @@ final class InvoicesTest extends TestCase
 
     /**
      * @depends testCreate
-     * @expectedException \Pancake\DomainException
      */
     public function testCannotChangeUniqueId()
     {
+        $this->expectException(\Pancake\DomainException::class);
+
         $invoice = new Invoice($this->server);
         $invoice->client_id = 1;
         $invoice->addStandardLineItem("Test", 2, 20);

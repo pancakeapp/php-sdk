@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Pancake;
 
 /**
@@ -14,19 +16,47 @@ namespace Pancake;
 class Invoices
 {
 
-    public static function get(Server $server)
+    /**
+     * Get all invoices.
+     *
+     * @param \Pancake\Server $server
+     * @return \Pancake\Invoice[]
+     */
+    public static function get(Server $server): array
     {
-        return $server->get("invoices/fetch");
+        $invoices = $server->get("invoices/fetch");
+
+        return array_map(function ($record) use ($server) {
+            return Invoice::createFromArray($server, $record);
+        }, $invoices);
     }
 
-    public static function getByClientId(Server $server, $client_id)
+    /**
+     * Get all invoices belonging to a given client.
+     *
+     * @param \Pancake\Server $server
+     * @param int $client_id
+     * @return \Pancake\Invoice[]
+     */
+    public static function getByClientId(Server $server, int $client_id): array
     {
-        return $server->get("invoices/fetch", [
+        $invoices = $server->get("invoices/fetch", [
             "client_id" => $client_id,
         ]);
+
+        return array_map(function ($record) use ($server) {
+            return Invoice::createFromArray($server, $record);
+        }, $invoices);
     }
 
-    public static function getByUniqueId(Server $server, $unique_id)
+    /**
+     * Get a specific invoice.
+     *
+     * @param \Pancake\Server $server
+     * @param string $unique_id
+     * @return \Pancake\Invoice|null
+     */
+    public static function getByUniqueId(Server $server, string $unique_id): ?Invoice
     {
         $result = $server->get("invoices/fetch", [
             "unique_id" => $unique_id,
@@ -34,11 +64,13 @@ class Invoices
             "include_partials" => true,
         ]);
 
-        $invoice = new Invoice($server);
-        foreach ()
-        $invoice->
+        $result = reset($result);
 
-        return reset($result);
+        if (!isset($result["unique_id"]) || $result["unique_id"] !== $unique_id) {
+            return null;
+        }
+
+        return Invoice::createFromArray($server, $result);
     }
 
     public static function send(Server $server, $unique_id)

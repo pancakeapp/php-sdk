@@ -2,6 +2,7 @@
 
 namespace Pancake;
 
+use Carbon\Carbon;
 use GuzzleHttp\Client;
 use Zend\Code\Reflection\ClassReflection;
 use Zend\Code\Reflection\DocBlock\Tag\PropertyTag;
@@ -161,14 +162,16 @@ class Invoice
         throw new DomainException("You can't unset invoice properties.");
     }
 
-    public function addPaymentPart($is_percentage, $amount, $due_date, $notes)
+    public function addPaymentPart(bool $is_percentage, float|string $amount, ?Carbon $due_date = null, ?string $notes = null): static
     {
         $this->internal_fields['parts'][] = [
-            "is_percentage" => $is_percentage,
+            "is_percentage" => $is_percentage ? 1 : 0,
             "amount" => $amount,
-            "due_date" => $due_date,
+            "due_date" => $due_date?->timestamp,
             "notes" => $notes,
         ];
+
+        return $this;
     }
 
     public function addPercentagePaymentPart($amount, $due_date, $notes)
@@ -327,6 +330,13 @@ class Invoice
         $this->internal_fields['files'][] = ["filename" => $filename, "contents" => base64_encode($contents)];
     }
 
+    public static function createFromArray(Server $server, array $array): static
+    {
+        $invoice = new static($server);
+        $invoice->reload($array);
+        return $invoice;
+    }
+
     public function save()
     {
         if ($this->unique_id) {
@@ -336,6 +346,7 @@ class Invoice
         }
 
         if ($result['status']) {
+            $this->internal_fields['unique_id'] = $result['unique_id'];
             $this->reload();
         } else {
             throw new RequestException(isset($result['error_message']) ? $result['error_message'] : $result['message']);
@@ -344,11 +355,17 @@ class Invoice
         return $result;
     }
 
-    public function reload($record = null): array
+    public function reload($record = null): static
     {
         if ($record === null) {
             # Fetch the record ourselves.
-            $record = Invoices::getByUniqueId($this->server, $this->unique_id);
+            $record = $this->server->get("invoices/fetch", [
+                "unique_id" => $this->unique_id,
+                "include_totals" => true,
+                "include_partials" => true,
+            ]);
+
+            $record = reset($record);
         }
 
         $items = $record["items"];
@@ -360,8 +377,6 @@ class Invoice
         $this->internal_fields = $record;
 
         foreach ($this->auto_cast as $name => $type) {
-            $name = substr($name, 1);
-
             switch ($type) {
                 case "integer":
                 case "int":
@@ -410,5 +425,7 @@ class Invoice
             unset($part['billableAmount']);
             $this->internal_fields["parts"][] = $part;
         }
+
+        return $this;
     }
 }
